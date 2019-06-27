@@ -115,3 +115,6 @@ itemshop.png
 
 # Credentials
 configuration.json
+
+# Local-only changes
+assets/images/logo.png

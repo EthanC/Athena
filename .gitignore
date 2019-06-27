@@ -102,3 +102,16 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Visual Studio Code
+.vscode/
+
+# Burbank font (paid)
+# https://fonts.adobe.com/fonts/burbank
+assets/fonts/BurbankBigCondensed-Black.otf
+
+# Output
+itemshop.png
+
+# Credentials
+configuration.json

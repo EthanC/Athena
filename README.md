@@ -8,6 +8,7 @@ Athena is a utility which generates the current Fortnite Item Shop into a styliz
 - [Requests](http://docs.python-requests.org/en/master/user/install/)
 - [Colorama](https://pypi.org/project/colorama/)
 - [Pillow](https://pillow.readthedocs.io/en/stable/installation.html#basic-installation)
+- [python-twitter](https://github.com/bear/python-twitter#installing)
 
 An [fnbr.co API Key](https://fnbr.co/api/docs) is required to obtain the Item Shop data, [Twitter API credentials](https://developer.twitter.com/en/apps) are required to Tweet the image.
 

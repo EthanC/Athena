@@ -12,7 +12,7 @@ As seen on [@FNMasterCom](https://twitter.com/FNMasterCom/status/114475752287367
 
 - [Python 3.7](https://www.python.org/downloads/)
 - [Requests](http://docs.python-requests.org/en/master/user/install/)
-- [(Colorama](https://pypi.org/project/colorama/)
+- [Colorama](https://pypi.org/project/colorama/)
 - [Pillow](https://pillow.readthedocs.io/en/stable/installation.html#basic-installation)
 - [python-twitter](https://github.com/bear/python-twitter#installing)
 

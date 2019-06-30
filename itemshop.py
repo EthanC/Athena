@@ -132,38 +132,17 @@ class Athena:
             font=font,
         )
 
-        # ToDo: Find a better way to do this...
+        # Track which grid position we're at
         i = 0
-        offsets = [
-            {"x": 0, "y": 0},
-            {"x": 300, "y": 0},
-            {"x": 600, "y": 0},
-            {"x": 0, "y": 545},
-            {"x": 300, "y": 545},
-            {"x": 600, "y": 545},
-            {"x": 0, "y": 1090},
-            {"x": 300, "y": 1090},
-            {"x": 600, "y": 1090},
-            {"x": 0, "y": 1635},
-            {"x": 300, "y": 1635},
-            {"x": 600, "y": 1635},
-            {"x": 0, "y": 2180},
-            {"x": 300, "y": 2180},
-            {"x": 600, "y": 2180},
-            {"x": 0, "y": 2725},
-            {"x": 300, "y": 2725},
-            {"x": 600, "y": 2725},
-            {"x": 0, "y": 3270},
-            {"x": 300, "y": 3270},
-            {"x": 600, "y": 3270},
-        ]
 
         for item in featured:
             card = Athena.GenerateCard(self, item)
 
             if card is not None:
                 shopImage.paste(
-                    card, ((20 + offsets[i]["x"]), (450 + offsets[i]["y"])), card
+                    card,
+                    ((20 + ((i % 3) * card.width)), (450 + ((i // 3) * card.height))),
+                    card,
                 )
 
                 i = i + 1
@@ -176,9 +155,11 @@ class Athena:
 
             if card is not None:
                 shopImage.paste(
-                    card, ((1000 + offsets[i]["x"]), (450 + offsets[i]["y"])), card
+                    card,
+                    ((1000 + ((i % 3) * card.width)), (450 + ((i // 3) * card.height))),
+                    card,
                 )
-
+                
                 i = i + 1
 
         try:

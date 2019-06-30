@@ -96,7 +96,9 @@ class ImageUtil:
 
         ratio = max(maxWidth / image.width, maxHeight / image.height)
 
-        return image.resize((int(image.width * ratio), int(image.height * ratio)))
+        return image.resize(
+            (int(image.width * ratio), int(image.height * ratio)), Image.ANTIALIAS
+        )
 
     def CenterX(self, foregroundWidth: int, backgroundWidth: int, distanceTop: int = 0):
         """Return the tuple necessary for horizontal centering and an optional vertical distance."""
@@ -114,10 +116,13 @@ class ImageUtil:
         try:
             return ImageFont.truetype(f"{directory}{font}", size)
         except OSError:
-            Log.Warn(self, "BurbankBigCondensed-Black.otf not found, defaulted font to LuckiestGuy-Regular.ttf")
+            Log.Warn(
+                self,
+                "BurbankBigCondensed-Black.otf not found, defaulted font to LuckiestGuy-Regular.ttf",
+            )
 
             return ImageFont.truetype(f"{directory}LuckiestGuy-Regular.ttf", size)
-        except Exception as e:  
+        except Exception as e:
             Log.Error(self, f"Failed to load font, {e}")
 
     def FitTextX(

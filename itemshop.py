@@ -159,7 +159,7 @@ class Athena:
                     ((1000 + ((i % 3) * card.width)), (450 + ((i // 3) * card.height))),
                     card,
                 )
-                
+
                 i = i + 1
 
         try:
@@ -244,7 +244,7 @@ class Athena:
             )
 
             vbucks = ImageUtil.Open(self, "vbucks.png")
-            vbucks = vbucks.resize((20, 20))
+            vbucks = ImageUtil.RatioResize(self, vbucks, 20, 20)
             card.paste(
                 vbucks,
                 ImageUtil.CenterX(self, textWidth, (card.width - 50), 500),

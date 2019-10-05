@@ -16,8 +16,6 @@ As seen on [@FNMasterCom](https://twitter.com/FNMasterCom/status/117048705935571
 - [Pillow](https://pillow.readthedocs.io/en/stable/installation.html#basic-installation)
 - [python-twitter](https://github.com/bear/python-twitter#installing)
 
-An [fnbr.co API Key](https://fnbr.co/api/docs) is required to obtain the Item Shop data, [Twitter API credentials](https://developer.twitter.com/en/apps) are required to Tweet the image.
-
 ## Usage
 
 Open `configuration_example.json` in your preferred text editor, fill the configurable values. Once finished, save and rename the file to `configuration.json`.
@@ -34,6 +32,6 @@ python itemshop.py
 
 ## Credits
 
-- Item Shop data provided by the [fnbr.co](https://fnbr.co/) API
+- Item Shop data provided by Not Officer#9999's [API](https://fn.notofficer.de/api/shop/v1)
 - Burbank font property of [Adobe](https://fonts.adobe.com/fonts/burbank)
 - Luckiest Guy font property of [Google](https://fonts.google.com/specimen/Luckiest+Guy)

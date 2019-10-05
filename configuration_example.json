@@ -1,9 +1,6 @@
 {
-    "delayStart": 15,
+    "delayStart": 10,
     "supportACreator": "YourSupportACreatorCode",
-    "fnbr": {
-        "apiKey": "XXXXXXXXXX"
-    },
     "twitter": {
         "enabled": true,
         "apiKey": "XXXXXXXXXX",

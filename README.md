@@ -32,6 +32,6 @@ python itemshop.py
 
 ## Credits
 
-- Item Shop data provided by Not Officer#9999's [API](https://fn.notofficer.de/api/shop/v1)
+- Item Shop data provided by Not Officer#9999's [API](https://fn.notofficer.de/api/shop)
 - Burbank font property of [Adobe](https://fonts.adobe.com/fonts/burbank)
 - Luckiest Guy font property of [Google](https://fonts.google.com/specimen/Luckiest+Guy)

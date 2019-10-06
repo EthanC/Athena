@@ -24,7 +24,7 @@ class Athena:
                 Log.Info(self, f"Delaying process start for {self.delay}s...")
                 sleep(self.delay)
 
-            itemShop = Utility.GET(self, "https://fn.notofficer.de/api/shop/v1")
+            itemShop = Utility.GET(self, "https://fn.notofficer.de/api/shop")
 
             if itemShop is not None:
                 itemShop = json.loads(itemShop)

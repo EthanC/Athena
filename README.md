@@ -12,7 +12,7 @@ As seen on [@FNMasterCom](https://twitter.com/FNMasterCom/status/117048705935571
 
 - [Python 3.7](https://www.python.org/downloads/)
 - [Requests](http://docs.python-requests.org/en/master/user/install/)
-- [Colorama](https://pypi.org/project/colorama/)
+- [coloredlogs](https://pypi.org/project/coloredlogs/)
 - [Pillow](https://pillow.readthedocs.io/en/stable/installation.html#basic-installation)
 - [python-twitter](https://github.com/bear/python-twitter#installing)
 
@@ -21,6 +21,7 @@ As seen on [@FNMasterCom](https://twitter.com/FNMasterCom/status/117048705935571
 Open `configuration_example.json` in your preferred text editor, fill the configurable values. Once finished, save and rename the file to `configuration.json`.
 
 - `delayStart`: Set to `0` to begin the process immediately
+- `language`: Set the language for the Item Shop data ([Supported Languages](https://fortnite-api.com/documentation))
 - `supportACreator`: Leave blank to omit the Support-A-Creator tag section of the Tweet
 - `twitter`: Set `enabled` to `false` if you wish for `itemshop.png` to not be Tweeted
 
@@ -32,6 +33,6 @@ python itemshop.py
 
 ## Credits
 
-- Item Shop data provided by Not Officer#9999's [API](https://fn.notofficer.de/api/shop)
+- Item Shop data provided by [Fortnite-API](https://fortnite-api.com/)
 - Burbank font property of [Adobe](https://fonts.adobe.com/fonts/burbank)
 - Luckiest Guy font property of [Google](https://fonts.google.com/specimen/Luckiest+Guy)

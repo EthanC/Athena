@@ -1,5 +1,6 @@
 {
     "delayStart": 10,
+    "language": "en",
     "supportACreator": "YourSupportACreatorCode",
     "twitter": {
         "enabled": true,

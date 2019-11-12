@@ -1,37 +1,47 @@
 import json
+import logging
 from math import ceil
 from sys import exit
 from time import sleep
 
+import coloredlogs
 import twitter
 from PIL import Image, ImageDraw
 
-from logger import Log
 from util import ImageUtil, Utility
+
+log = logging.getLogger(__name__)
+coloredlogs.install(level="INFO", fmt="[%(asctime)s] %(message)s", datefmt="%I:%M:%S")
 
 
 class Athena:
     """Fortnite Item Shop Generator."""
 
     def main(self):
-        Log.Intro(self, "Athena - Fortnite Item Shop Generator")
-        Log.Intro(self, "https://github.com/EthanC/Athena\n")
+        print("Athena - Fortnite Item Shop Generator")
+        print("https://github.com/EthanC/Athena\n")
 
         initialized = Athena.LoadConfiguration(self)
 
         if initialized is True:
             if self.delay > 0:
-                Log.Info(self, f"Delaying process start for {self.delay}s...")
+                log.info(f"Delaying process start for {self.delay}s...")
                 sleep(self.delay)
 
-            itemShop = Utility.GET(self, "https://fn.notofficer.de/api/shop")
+            itemShop = Utility.GET(
+                self,
+                "https://fortnite-api.com/shop/br",
+                parameters={"language": self.language},
+            )
 
             if itemShop is not None:
-                itemShop = json.loads(itemShop)
+                itemShop = json.loads(itemShop)["data"]
 
                 # Strip time from the timestamp, we only need the date
-                date = Utility.ISOtoHuman(self, itemShop["date"].split("T")[0])
-                Log.Success(self, f"Retrieved Item Shop for {date}")
+                date = Utility.ISOtoHuman(
+                    self, itemShop["date"].split("T")[0], self.language
+                )
+                log.info(f"Retrieved Item Shop for {date}")
 
                 shopImage = Athena.GenerateImage(self, date, itemShop)
 
@@ -50,6 +60,7 @@ class Athena:
 
         try:
             self.delay = configuration["delayStart"]
+            self.language = configuration["language"]
             self.supportACreator = configuration["supportACreator"]
             self.twitterEnabled = configuration["twitter"]["enabled"]
             self.twitterAPIKey = configuration["twitter"]["apiKey"]
@@ -57,11 +68,11 @@ class Athena:
             self.twitterAccessToken = configuration["twitter"]["accessToken"]
             self.twitterAccessSecret = configuration["twitter"]["accessSecret"]
 
-            Log.Success(self, "Loaded configuration")
+            log.info("Loaded configuration")
 
             return True
         except Exception as e:
-            Log.Error(self, f"Failed to load configuration, {e}")
+            log.critical(f"Failed to load configuration, {e}")
 
     def GenerateImage(self, date: str, itemShop: dict):
         """
@@ -78,7 +89,7 @@ class Athena:
             if (len(featured) <= 0) or (len(daily) <= 0):
                 raise Exception(f"Featured: {len(featured)}, Daily: {len(daily)}")
         except Exception as e:
-            Log.Error(self, f"Failed to parse Item Shop Featured and Daily items, {e}")
+            log.critical(f"Failed to parse Item Shop Featured and Daily items, {e}")
 
             return False
 
@@ -97,7 +108,7 @@ class Athena:
                 background, ImageUtil.CenterX(self, background.width, shopImage.width)
             )
         except FileNotFoundError:
-            Log.Warn(self, "Failed to open background.png, defaulting to dark gray")
+            log.warn("Failed to open background.png, defaulting to dark gray")
             shopImage.paste((18, 18, 18), [0, 0, shopImage.size[0], shopImage.size[1]])
 
         logo = ImageUtil.Open(self, "logo.png")
@@ -162,11 +173,11 @@ class Athena:
 
         try:
             shopImage.save("itemshop.png")
-            Log.Success(self, "Generated Item Shop image")
+            log.info("Generated Item Shop image")
 
             return True
         except Exception as e:
-            Log.Error(self, f"Failed to save Item Shop image, {e}")
+            log.critical(f"Failed to save Item Shop image, {e}")
 
     def GenerateCard(self, item: dict):
         """Return the card image for the provided Fortnite Item Shop item."""
@@ -175,8 +186,8 @@ class Athena:
             name = item["items"][0]["name"]
             rarity = item["items"][0]["rarity"]
             category = item["items"][0]["type"]
-            price = str(item["finalPrice"])
-            if (category == "Outfit") or (category == "Wrap"):
+            price = item["finalPrice"]
+            if (category == "outfit") or (category == "wrap"):
                 if item["items"][0]["images"]["featured"] is not None:
                     icon = item["items"][0]["images"]["featured"]["url"]
                 else:
@@ -184,38 +195,43 @@ class Athena:
             else:
                 icon = item["items"][0]["images"]["icon"]["url"]
         except Exception as e:
-            Log.Error(self, f"Failed to parse item {name}, {e}")
+            log.error(f"Failed to parse item {name}, {e}")
 
             return
 
-        if rarity == "Common":
-            blendColor = (190, 190, 190)
-        elif rarity == "Uncommon":
-            blendColor = (96, 170, 58)
-        elif rarity == "Rare":
-            blendColor = (73, 172, 242)
-        elif rarity == "Epic":
-            blendColor = (177, 91, 226)
-        elif rarity == "Legendary":
+        if rarity == "frozen":
+            blendColor = (148, 223, 255)
+        elif rarity == "lava":
+            blendColor = (234, 141, 35)
+        elif rarity == "legendary":
             blendColor = (211, 120, 65)
-        elif rarity == "Marvel":
-            blendColor = (197, 51, 52)
-        elif rarity == "Dark":
+        elif rarity == "dark":
             blendColor = (251, 34, 223)
-        elif rarity == "DC":
+        elif rarity == "marvel":
+            blendColor = (197, 51, 52)
+        elif rarity == "dc":
             blendColor = (84, 117, 199)
+        elif rarity == "creatorcollab":
+            blendColor = (54, 183, 183)
+        elif rarity == "shadow":
+            blendColor = (113, 113, 113)
+        elif rarity == "epic":
+            blendColor = (177, 91, 226)
+        elif rarity == "rare":
+            blendColor = (73, 172, 242)
+        elif rarity == "uncommon":
+            blendColor = (96, 170, 58)
+        elif rarity == "common":
+            blendColor = (190, 190, 190)
         else:
             blendColor = (255, 255, 255)
 
         card = Image.new("RGBA", (300, 545))
 
         try:
-            layer = ImageUtil.Open(self, f"card_top_{rarity.lower()}.png")
+            layer = ImageUtil.Open(self, f"card_top_{rarity}.png")
         except FileNotFoundError:
-            Log.Warn(
-                self,
-                f"Failed to open card_top_{rarity.lower()}.png, defaulted to Common",
-            )
+            log.warn(f"Failed to open card_top_{rarity}.png, defaulted to Common")
             layer = ImageUtil.Open(self, "card_top_common.png")
 
         card.paste(layer)
@@ -234,63 +250,69 @@ class Athena:
                     extraRarity = extra["rarity"]
                     extraIcon = extra["images"]["smallIcon"]["url"]
                 except Exception as e:
-                    Log.Error(self, f"Failed to parse item {name}, {e}")
+                    log.error(f"Failed to parse item {name}, {e}")
 
                     return
 
                 try:
-                    layer = ImageUtil.Open(
-                        self, f"box_bottom_{extraRarity.lower()}.png"
-                    )
+                    layer = ImageUtil.Open(self, f"box_bottom_{extraRarity}.png")
                 except FileNotFoundError:
-                    Log.Warn(
-                        self,
-                        f"Failed to open box_bottom_{extraRarity.lower()}.png, defaulted to Common",
+                    log.warn(
+                        f"Failed to open box_bottom_{extraRarity}.png, defaulted to Common"
                     )
                     layer = ImageUtil.Open(self, "box_bottom_common.png")
 
-                card.paste(layer, (17, (17 + ((i // 1) * (layer.height)))))
+                card.paste(
+                    layer,
+                    (
+                        (card.width - (layer.width + 9)),
+                        (9 + ((i // 1) * (layer.height))),
+                    ),
+                )
 
                 extraIcon = ImageUtil.Download(self, extraIcon)
                 extraIcon = ImageUtil.RatioResize(self, extraIcon, 75, 75)
 
                 card.paste(
-                    extraIcon, (17, (17 + ((i // 1) * (extraIcon.height)))), extraIcon
+                    extraIcon,
+                    (
+                        (card.width - (layer.width + 9)),
+                        (9 + ((i // 1) * (extraIcon.height))),
+                    ),
+                    extraIcon,
                 )
 
                 try:
-                    layer = ImageUtil.Open(
-                        self, f"box_faceplate_{extraRarity.lower()}.png"
-                    )
+                    layer = ImageUtil.Open(self, f"box_faceplate_{extraRarity}.png")
                 except FileNotFoundError:
-                    Log.Warn(
-                        self,
-                        f"Failed to open box_faceplate_{extraRarity.lower()}.png, defaulted to Common",
+                    log.warn(
+                        f"Failed to open box_faceplate_{extraRarity}.png, defaulted to Common"
                     )
                     layer = ImageUtil.Open(self, "box_faceplate_common.png")
 
-                card.paste(layer, (17, (17 + ((i // 1) * (layer.height)))), layer)
+                card.paste(
+                    layer,
+                    (
+                        (card.width - (layer.width + 9)),
+                        (9 + ((i // 1) * (layer.height))),
+                    ),
+                    layer,
+                )
 
                 i += 1
 
         try:
-            layer = ImageUtil.Open(self, f"card_faceplate_{rarity.lower()}.png")
+            layer = ImageUtil.Open(self, f"card_faceplate_{rarity}.png")
         except FileNotFoundError:
-            Log.Warn(
-                self,
-                f"Failed to open card_faceplate_{rarity.lower()}.png, defaulted to Common",
-            )
+            log.warn(f"Failed to open card_faceplate_{rarity}.png, defaulted to Common")
             layer = ImageUtil.Open(self, "card_faceplate_common.png")
 
         card.paste(layer, layer)
 
         try:
-            layer = ImageUtil.Open(self, f"card_bottom_{rarity.lower()}.png")
+            layer = ImageUtil.Open(self, f"card_bottom_{rarity}.png")
         except FileNotFoundError:
-            Log.Warn(
-                self,
-                f"Failed to open card_bottom_{rarity.lower()}.png, defaulted to Common",
-            )
+            log.warn(f"Failed to open card_bottom_{rarity}.png, defaulted to Common")
             layer = ImageUtil.Open(self, "card_bottom_common.png")
 
         card.paste(layer, layer)
@@ -298,10 +320,10 @@ class Athena:
         canvas = ImageDraw.Draw(card)
 
         font = ImageUtil.Font(self, 30)
-        textWidth, _ = font.getsize(f"{rarity} {category}")
+        textWidth, _ = font.getsize(f"{rarity.capitalize()} {category.capitalize()}")
         canvas.text(
             ImageUtil.CenterX(self, textWidth, card.width, 385),
-            f"{rarity} {category}",
+            f"{rarity.capitalize()} {category.capitalize()}",
             blendColor,
             font=font,
         )
@@ -309,11 +331,12 @@ class Athena:
         vbucks = ImageUtil.Open(self, "vbucks.png")
         vbucks = ImageUtil.RatioResize(self, vbucks, 25, 25)
 
+        price = str(f"{price:,}")
         textWidth, _ = font.getsize(price)
         canvas.text(
             ImageUtil.CenterX(self, ((textWidth - 5) - vbucks.width), card.width, 495),
             price,
-            (255, 255, 255),
+            blendColor,
             font=font,
         )
 
@@ -325,11 +348,12 @@ class Athena:
 
         font = ImageUtil.Font(self, 56)
         textWidth, _ = font.getsize(name)
+        change = 0
         if textWidth >= 270:
             # Ensure that the item name does not overflow
-            font, textWidth = ImageUtil.FitTextX(self, name, 56, 265)
+            font, textWidth, change = ImageUtil.FitTextX(self, name, 56, 260)
         canvas.text(
-            ImageUtil.CenterX(self, textWidth, card.width, 425),
+            ImageUtil.CenterX(self, textWidth, card.width, (425 + (change / 2))),
             name,
             (255, 255, 255),
             font=font,
@@ -353,7 +377,7 @@ class Athena:
 
             twitterAPI.VerifyCredentials()
         except Exception as e:
-            Log.Error(self, f"Failed to authenticate with Twitter, {e}")
+            log.critical(f"Failed to authenticate with Twitter, {e}")
 
             return
 
@@ -366,14 +390,14 @@ class Athena:
             with open("itemshop.png", "rb") as shopImage:
                 twitterAPI.PostUpdate(body, media=shopImage)
 
-            Log.Success(self, "Tweeted Item Shop")
+            log.info("Tweeted Item Shop")
         except Exception as e:
-            Log.Error(self, f"Failed to Tweet Item Shop, {e}")
+            log.critical(f"Failed to Tweet Item Shop, {e}")
 
 
 if __name__ == "__main__":
     try:
         Athena.main(Athena)
     except KeyboardInterrupt:
-        Log.Info(Athena, "Exiting...")
+        log.info("Exiting...")
         exit()

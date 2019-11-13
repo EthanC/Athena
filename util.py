@@ -2,6 +2,7 @@ import json
 import locale
 import logging
 from datetime import datetime
+import traceback
 
 import requests
 from PIL import Image, ImageFont
@@ -34,7 +35,10 @@ class Utility:
     def ISOtoHuman(self, date: str, language: str):
         """Return the provided ISO8601 timestamp in human-readable format."""
 
-        locale.setlocale(locale.LC_ALL, language)
+        try:
+            locale.setlocale(locale.LC_ALL, language)
+        except locale.Error:
+            log.warn(f"Unsupported locale configured, using system default")
 
         try:
             # Unix-supported zero padding removal

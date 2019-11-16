@@ -207,11 +207,13 @@ class Athena:
             blendColor = (211, 120, 65)
         elif rarity == "dark":
             blendColor = (251, 34, 223)
+        elif rarity == "starwars":
+            blendColor = (231, 196, 19)
         elif rarity == "marvel":
             blendColor = (197, 51, 52)
         elif rarity == "dc":
             blendColor = (84, 117, 199)
-        elif rarity == "creatorcollab":
+        elif rarity == "icon":
             blendColor = (54, 183, 183)
         elif rarity == "shadow":
             blendColor = (113, 113, 113)

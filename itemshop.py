@@ -31,7 +31,8 @@ class Athena:
             itemShop = Utility.GET(
                 self,
                 "https://fortnite-api.com/shop/br",
-                parameters={"language": self.language},
+                {"x-api-key": self.apiKey},
+                {"language": self.language},
             )
 
             if itemShop is not None:
@@ -60,6 +61,7 @@ class Athena:
 
         try:
             self.delay = configuration["delayStart"]
+            self.apiKey = configuration["fortniteAPI"]["apiKey"]
             self.language = configuration["language"]
             self.supportACreator = configuration["supportACreator"]
             self.twitterEnabled = configuration["twitter"]["enabled"]

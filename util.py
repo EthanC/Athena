@@ -12,13 +12,13 @@ log = logging.getLogger(__name__)
 class Utility:
     """Class containing utilitarian functions intended to reduce duplicate code."""
 
-    def GET(self, url: str, parameters: dict = {"language": "en"}):
+    def GET(self, url: str, headers: dict, parameters: dict = {"language": "en"}):
         """
         Return the response of a successful HTTP GET request to the specified
         URL with the optionally provided header values.
         """
 
-        res = requests.get(url, params=parameters)
+        res = requests.get(url, headers=headers, params=parameters)
 
         # HTTP 200 (OK)
         if res.status_code == 200:

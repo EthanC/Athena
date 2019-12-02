@@ -1,5 +1,8 @@
 {
     "delayStart": 10,
+    "fortniteAPI": {
+        "apiKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    },
     "language": "en",
     "supportACreator": "YourSupportACreatorCode",
     "twitter": {

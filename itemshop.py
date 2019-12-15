@@ -189,11 +189,8 @@ class Athena:
             rarity = item["items"][0]["rarity"]
             category = item["items"][0]["type"]
             price = item["finalPrice"]
-            if (category == "outfit") or (category == "wrap"):
-                if item["items"][0]["images"]["featured"] is not None:
-                    icon = item["items"][0]["images"]["featured"]["url"]
-                else:
-                    icon = item["items"][0]["images"]["icon"]["url"]
+            if isinstance(item["items"][0]["images"]["featured"]["url"], str):
+                icon = item["items"][0]["images"]["featured"]["url"]
             else:
                 icon = item["items"][0]["images"]["icon"]["url"]
         except Exception as e:
@@ -241,8 +238,16 @@ class Athena:
         card.paste(layer)
 
         icon = ImageUtil.Download(self, icon)
-        icon = ImageUtil.RatioResize(self, icon, 285, 365)
-        card.paste(icon, ImageUtil.CenterX(self, icon.width, card.width), icon)
+        if (category == "outfit") or (category == "emote"):
+            icon = ImageUtil.RatioResize(self, icon, 285, 365)
+        elif category == "wrap":
+            icon = ImageUtil.RatioResize(self, icon, 230, 310)
+        else:
+            icon = ImageUtil.RatioResize(self, icon, 310, 390)
+        if (category == "outfit") or (category == "emote"):
+            card.paste(icon, ImageUtil.CenterX(self, icon.width, card.width), icon)
+        else:
+            card.paste(icon, ImageUtil.CenterX(self, icon.width, card.width, 15), icon)
 
         if len(item["items"]) > 1:
             # Track grid position

@@ -189,7 +189,7 @@ class Athena:
             rarity = item["items"][0]["rarity"]
             category = item["items"][0]["type"]
             price = item["finalPrice"]
-            if isinstance(item["items"][0]["images"]["featured"]["url"], str):
+            if isinstance(item["items"][0]["images"]["featured"], dict):
                 icon = item["items"][0]["images"]["featured"]["url"]
             else:
                 icon = item["items"][0]["images"]["icon"]["url"]

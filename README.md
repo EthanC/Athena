@@ -16,7 +16,7 @@ As seen on [@FNMasterCom](https://twitter.com/FNMasterCom/status/119766612307816
 - [Pillow](https://pillow.readthedocs.io/en/stable/installation.html#basic-installation)
 - [python-twitter](https://github.com/bear/python-twitter#installing)
 
-A [Fortnite-API API Key](https://fortnite-api.com/profile) is required to obtain the Item Shop data, Twitter API credentials are required to Tweet the image.
+A [Fortnite-API API Key](https://fortnite-api.com/profile) is required to obtain the Item Shop data, [Twitter API credentials](https://developer.twitter.com/en/apps) are required to Tweet the image.
 
 ## Usage
 
@@ -28,6 +28,8 @@ Open `configuration_example.json` in your preferred text editor, fill the config
 - `twitter`: Set `enabled` to `false` if you wish for `itemshop.png` to not be Tweeted
 
 Edit the images found in `assets/images/` to your liking, avoid changing image dimensions for optimal results.
+
+Athena is designed to be ran using a scheduler, such as [cron](https://en.wikipedia.org/wiki/Cron).
 
 ```
 python itemshop.py
